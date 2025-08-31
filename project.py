@@ -1,6 +1,7 @@
-nomeCliente = ""
-numeroConta = 0
-saldo = 0.0
+dadosClientes = []
+# nomeCliente = ""
+# numeroConta = 0
+# saldo = 0.0
 
 while True:
     print("\n--------MENU--------")
@@ -14,27 +15,57 @@ while True:
 
     if(opcao == 1):
         nomeCliente = input("Digite o nome do cliente: ")
-        numeroConta = input("Digite o número da conta: ")
+        numeroConta = int(input("Digite o número da conta: "))
         saldo = float(input("Digite o saldo inicial: "))
+
+        cliente = {
+            "nomeCliente": nomeCliente,
+            "numeroConta": numeroConta,
+            "saldo": saldo
+        }
+        dadosClientes.append(cliente)
+         
         print(f"\nConta de {nomeCliente} criada com sucesso.")
     elif(opcao == 2):
-        if(numeroConta != 0):
-            print(f"\nCliente: {nomeCliente} | Saldo: R${saldo:.2f}")
-        else: 
+        numero = int(input("Digite o número da conta para consultar o saldo: "))
+
+        encontrado = False
+        for cliente in dadosClientes:
+            if(cliente["numeroConta"] == numero):
+                print(f"\nCliente: {cliente['nomeCliente']} | Saldo: R${cliente['saldo']:.2f}")
+                encontrado = True
+                break
+        if(encontrado == False):
             print("\nConta não encontrada.")
+
     elif(opcao == 3):
-        if(numeroConta != 0):
-            deposito = float(input("\nDigite o valor a ser depositado: "))
-            saldo += deposito
-            print("\nDeposito concluído com sucesso.")
-        else:
+        numero = int(input("\nDigite o numero da conta para depositar: "))
+
+        encontrado = False
+        for cliente in dadosClientes:
+            if(cliente['numeroConta'] == numero):
+                deposito = float(input("\nDigite o valor a ser depositado: "))
+                cliente['saldo'] += deposito
+                print("\nDeposito concluído com sucesso.")
+                encontrado = True
+                break
+        if(encontrado == False):
             print("\nConta não encontrada.")
     elif(opcao == 4):
-        if(numeroConta != 0):
-            saque = float(input("\nDigite o valor que deseja sacar: "))
-            saldo -= saque
-            print("\nSaque concluído com sucesso.")
-        else:
+        numero = int(input("\nDigite o numero da conta para sacar: "))
+
+        encontrado = False
+        for cliente in dadosClientes:
+            if(numeroConta != 0):
+                saque = float(input("\nDigite o valor que deseja sacar: "))
+                if(cliente['saldo'] >= saque):  
+                    cliente['saldo'] -= saque
+                    print("\nSaque concluído com sucesso.")
+                else:
+                    print("\nSaldo insuficiente para realizar saque.")
+                encontrado = True
+                break
+        if(encontrado == False):
             print("\nConta não encontrada.")
     elif(opcao == 5):
         print("\nSaindo do sistema. Volte sempre!")
