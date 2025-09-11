@@ -1,9 +1,12 @@
+from biblioteca import carregar_dados
+from biblioteca import salvar_dados
 from biblioteca import criar_conta
 from biblioteca import consultar_saldo
 from biblioteca import depositar
 from biblioteca import sacar
+from biblioteca import listar_contas
 
-dadosClientes = []
+dadosClientes = carregar_dados("contas.json")
 
 while True:
     print("\n--------MENU--------")
@@ -11,7 +14,8 @@ while True:
     print("2 - Consultar Saldo")
     print("3 - Depositar")
     print("4 - Sacar")
-    print("5 - Sair")
+    print("5 - Listar contas")
+    print("6 - Sair")
 
     opcao = int(input("\nEscolha uma opção: "))
 
@@ -37,8 +41,15 @@ while True:
         valor = float(input("\nDigite o valor que deseja sacar: "))
 
         sacarValor = sacar(dadosClientes, numero, valor)
+
     elif(opcao == 5):
+        print("\nCONTAS CADASTRADAS: ")
+        listar_contas(dadosClientes)
+
+    elif(opcao == 6):
         print("\nSaindo do sistema. Volte sempre!")
         break
     else:
         print("\nOpção inválida. Selecione uma opção válida no menu!")
+
+salvar_dados(dadosClientes, "contas.json")
