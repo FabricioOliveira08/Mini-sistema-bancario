@@ -1,67 +1,107 @@
 import json
-#Funções de Lógica
-def criar_conta(lista_clientes, numeroConta):
+#Funções Auxiliares
+def nome_cliente():
+    while True:
+        nomeCliente = input("Digite o nome do cliente: ")
+        if(nomeCliente.isdigit()):
+            print("Digite um nome válido!")
+        else:
+            break
+    return nomeCliente
+
+def numero_conta():
     
+    while True:
+        nConta = input("\nDigite o número da conta: ")
+        try:
+            nContaInt = int(nConta)
+            if(nContaInt > 0):
+                break
+            else:
+                print("Digite um número válido.")
+        except:
+            print("Digite um número válido.")
+    
+    return nContaInt
+
+def encontrar_cliente(lista_clientes, numeroConta):
     for cliente in lista_clientes:
         if(cliente['numeroConta'] == numeroConta):
-            print("Conta já existente!")
-            break
-    
-    nomeCliente = input("Digite o nome do cliente: ")
+            return cliente
+    return 
+            
+#Funções de Lógica
+def criar_conta(lista_clientes):
+
+    numeroConta = numero_conta()
+    nomeCliente = nome_cliente()
     saldo = float(input("Digite o saldo inicial: "))
 
-    cliente = {
+    clienteExistente = encontrar_cliente(lista_clientes,  numeroConta)
+
+    if(clienteExistente == None):
+        cliente = {
             "nomeCliente": nomeCliente,
             "numeroConta": numeroConta,
             "saldo": saldo
         }
-    lista_clientes.append(cliente)
+        lista_clientes.append(cliente)
+        print(f"\nConta de {nomeCliente} criada com sucesso.")
+        return True
+    else: 
+        print("\nConta já existente.")
+        return False
 
-    print(f"\nConta de {nomeCliente} criada com sucesso.")
-    return True
 
-
-def consultar_saldo(lista_clientes, numero):
-
-    for cliente in lista_clientes:
-        if(cliente["numeroConta"] == numero):
-            print(f"\nCliente: {cliente['nomeCliente']} | Saldo: R${cliente['saldo']:.2f}")
-            return True
+def consultar_saldo(lista_clientes, numeroConta):
     
-    print("\nConta não encontrada.")
-    return False
+    clienteExistente = encontrar_cliente(lista_clientes, numeroConta)
+    
+    if(clienteExistente != None):
+        print(f"\nCliente: {clienteExistente['nomeCliente']} | Saldo: R${clienteExistente['saldo']:.2f}")
+        return True
+    else:  
+        print("\nConta não encontrada.")
+        return False    
 
 
-def depositar(lista_clientes, numero, valor):
+def depositar(lista_clientes, numeroConta, valor):
      
-    for cliente in lista_clientes:
-        if(cliente['numeroConta'] == numero):
-            if(valor > 0):
-                cliente['saldo'] += valor
-                print("\nDeposito concluído com sucesso.")
-            else:
-                print("\nValor inválido para depósito.")
+    clienteExistente = encontrar_cliente(lista_clientes, numeroConta)
+    
+    if(clienteExistente != None):
+        if(valor > 0):
+            clienteExistente['saldo'] += valor
+            print("\nDeposito concluído com sucesso.")
             return True
-            
-    print("\nConta não encontrada.")
-    return False
+        else:
+            print("\nValor inválido para depósito.")
+            return False
+    else:       
+        print("\nConta não encontrada.")
+        return False
 
 
-def sacar(lista_clientes, numero, valor):
-    for cliente in lista_clientes:
-        if(cliente['numeroConta'] == numero):
-            if(valor > 0):
-                if(cliente['saldo'] >= valor):  
-                    cliente['saldo'] -= valor
-                    print("\nSaque concluído com sucesso.")
-                else:
-                    print("\nSaldo insuficiente para realizar saque.")
-            else: 
-                print("Valor inválido para saque.")
-            return True    
-        
-    print("\nConta não encontrada.")
-    return False
+def sacar(lista_clientes, numeroConta, valor):
+    
+    clienteExistente = encontrar_cliente(lista_clientes, numeroConta)
+    
+    if(clienteExistente != None):
+        if(valor > 0):
+            if(clienteExistente['saldo'] >= valor):  
+                clienteExistente['saldo'] -= valor
+                print("\nSaque concluído com sucesso.")
+                return True
+            else:
+                print("\nSaldo insuficiente para realizar saque.")
+                return False
+        else: 
+            print("Valor inválido para saque.")
+            return False    
+    else:
+       print("\nConta não encontrada.")
+       return False 
+    
 
 def listar_contas(lista_clientes):
     if(len(lista_clientes) == 0):

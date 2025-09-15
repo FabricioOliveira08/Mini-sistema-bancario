@@ -5,6 +5,7 @@ from biblioteca import consultar_saldo
 from biblioteca import depositar
 from biblioteca import sacar
 from biblioteca import listar_contas
+from biblioteca import numero_conta
 
 dadosClientes = carregar_dados("contas.json")
 
@@ -20,27 +21,24 @@ while True:
     opcao = int(input("\nEscolha uma opção: "))
 
     if(opcao == 1):
-        numeroConta = int(input("\nDigite o número da conta: "))
-        novaConta = criar_conta(dadosClientes, numeroConta)
+        criar_conta(dadosClientes)
 
     elif(opcao == 2):
-        numeroConta = int(input("\nDigite o número da conta para consultar o saldo: "))
-
+        numeroConta = numero_conta()
         consultarSaldo = consultar_saldo(dadosClientes, numeroConta)
 
     elif(opcao == 3):
-        numero = int(input("\nDigite o número da conta para depositar: "))
-
+        numeroConta = numero_conta()
         valor = float(input("\nDigite o valor a ser depositado: "))
 
-        depositarValor = depositar(dadosClientes, numero, valor)
+        depositar(dadosClientes, numeroConta, valor)
 
     elif(opcao == 4):
-        numero = int(input("\nDigite o número da conta para sacar: "))
+        numeroConta = numero_conta()
 
         valor = float(input("\nDigite o valor que deseja sacar: "))
 
-        sacarValor = sacar(dadosClientes, numero, valor)
+        sacar(dadosClientes, numeroConta, valor)
 
     elif(opcao == 5):
         print("\nCONTAS CADASTRADAS: ")
